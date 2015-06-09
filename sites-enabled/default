@@ -1,0 +1,37 @@
+server {
+	listen 80 default_server;
+
+	root /var/www/default;
+	index index.php index.html index.htm;
+
+	location / {
+		try_files $uri $uri/ =404;
+
+		# базова авторизація
+		# попередньо генеруємо .htpasswd файл за допомогою пакету apache-utils
+		auth_basic "Restricted";
+      	auth_basic_user_file /var/www/default/.htpasswd;
+	}
+
+	location ~ /\.ht {
+		deny  all;
+	}
+
+	# favicon.ico conf
+    location = /favicon.ico {
+        try_files 	    /favicon.ico    @favicon_empty;
+        expires	            7d;
+        access_log          off;
+        log_not_found       off;
+    }
+ 
+    location @favicon_empty {
+        empty_gif;
+        expires	            7d;
+        access_log          off;
+        log_not_found       off;
+    }
+
+
+	include /etc/nginx/templates/php.conf;
+}
