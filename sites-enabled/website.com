@@ -13,4 +13,6 @@ server {
 	include templates/security.conf;
 	include templates/protect-system-files.conf;	
 	include templates/php.conf;
+
+
 }
