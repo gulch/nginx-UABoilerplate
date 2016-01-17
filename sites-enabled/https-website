@@ -1,0 +1,32 @@
+server {
+    listen       80;
+    server_name  https-website.com www.https-website.com;
+    return       301 "https://$host$request_uri";
+}
+
+server {
+	listen 443 ssl http2;
+	server_name https-website.com www.https-website.com;
+	root /var/www/https-website.com/public;
+	index index.php index.html;
+
+	# ---- SSL -- START ----
+
+	ssl_trusted_certificate /path/to/chain.pem;
+    ssl_certificate_key     /path/to/privkey.pem;
+    ssl_certificate         /path/to/fullchain.pem;
+
+    include templates/ssl.conf;
+
+    # ---- SSL -- END ----
+
+	include templates/non-slash.conf;
+	include templates/non-index-php.conf;
+	include templates/semantic-url.conf;
+	include templates/favicon.conf;
+	include templates/cache-static.conf;
+	include templates/non-www.conf;
+	include templates/security.conf;
+	include templates/protect-system-files.conf;	
+	include templates/php.conf;
+}
